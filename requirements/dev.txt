@@ -1,0 +1,6 @@
+-r common.txt
+pip-tools
+pip-audit
+pytest
+coverage
+pylint
