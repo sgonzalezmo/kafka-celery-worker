@@ -9,6 +9,9 @@ class Settings(BaseSettings):
     # Celery environment variables
     CELERY_BROKER_URL: str
     CELERY_RESULT_BACKEND: str
+    # Kafka environment variables
+    KAFKA_SERVER: str
+    KAFKA_TOPIC: str
 
     class Config:
         case_sensitive = True
