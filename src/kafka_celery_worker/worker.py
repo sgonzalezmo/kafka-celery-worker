@@ -9,6 +9,7 @@ celery.config_from_object(celeryconfig)
 # Register worker tasks
 celery.autodiscover_tasks(
     [
-        "kafka_celery_worker.task",
+        "kafka_celery_worker.tasks.kafka",
+        "kafka_celery_worker.tasks.arithmetic",
     ]
 )
