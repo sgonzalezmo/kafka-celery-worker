@@ -1,10 +1,18 @@
+import json
 import logging
 
 from kafka import KafkaConsumer
 from kafka.errors import KafkaTimeoutError
+from pydantic import BaseModel, ValidationError
 
 from kafka_celery_worker.core.config import settings
 from kafka_celery_worker.worker import celery
+
+
+class Message(BaseModel):
+    operation: str
+    a: int
+    b: int
 
 
 @celery.task(
@@ -23,7 +31,28 @@ def read_messages():
     logging.info("Reading messages from Kafka topic")
     try:
         for message in consumer:
-            print(message.value.decode("utf-8"))
+            try:
+                message_value = Message(
+                    **json.loads(message.value.decode("utf-8"))
+                )
+            except (ValidationError, json.JSONDecodeError) as exc:
+                logging.error("Invalid message: %s", exc)
+                continue
+            # Perform arithmetic operation creating a task of the arithmetic
+            # module
+            logging.info(
+                "Received message: %s %s %s",
+                message_value.operation,
+                message_value.a,
+                message_value.b,
+            )
+            celery.send_task(
+                f"arithmetic.{message_value.operation}",
+                args=[
+                    message_value.a,
+                    message_value.b,
+                ],
+            )
     except KafkaTimeoutError:
         logging.info(
             "No messages received in the last %i seconds, stopping consumer.",
