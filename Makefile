@@ -1,4 +1,4 @@
-project := kafka_celery_beat
+project := kafka_celery_worker
 
 .DEFAULT_GOAL : help
 
