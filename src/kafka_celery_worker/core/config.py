@@ -14,6 +14,7 @@ class Settings(BaseSettings):
     KAFKA_TOPIC: str
     KAFKA_CONSUMER_GROUP: str
     KAFKA_CONSUMER_TIMEOUT: int
+    KAFKA_AUTO_OFFSET_RESET: str = "latest"
 
     class Config:
         case_sensitive = True
