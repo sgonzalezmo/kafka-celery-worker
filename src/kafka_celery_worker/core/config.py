@@ -12,6 +12,8 @@ class Settings(BaseSettings):
     # Kafka environment variables
     KAFKA_SERVER: str
     KAFKA_TOPIC: str
+    KAFKA_CONSUMER_GROUP: str
+    KAFKA_CONSUMER_TIMEOUT: int
 
     class Config:
         case_sensitive = True
